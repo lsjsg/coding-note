@@ -1,0 +1,78 @@
+Module(
+body=[
+    FunctionDef(
+        name='add', args=arguments
+        (args=[arg(arg='num', annotation=None)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[]),
+        body=[
+            For(target=Name(id='i', ctx=Store()), iter=Call(func=Name(id='range', ctx=Load()), args=[Name(id='num', ctx=Load())], keywords=[]),
+                body=[
+                AugAssign(target=Name(id='sum', ctx=Store()), op=Add(), value=Name(id='i', ctx=Load()))
+                ], orelse=[]),
+        Return(value=Name(id='sum', ctx=Load()))
+        ],
+        decorator_list=[], returns=None),
+
+    Expr(value=Call(func=Name(id='print', ctx=Load()), args=[Call(func=Name(id='add', ctx=Load()), args=[Num(n=5)], keywords=[])], keywords=[]))])
+
+
+
+        # for i in len(sentence):
+        #     if sentence[i] == "Module":
+        #         Module = []
+        #         self.list.append(Module)
+        #
+        #     elif sentence[i] == "body":
+        #         body=[]
+        #
+        #     elif sentence[i] == "(":
+        #         left_tuple += 1
+        #
+        #     elif sentence[i] == ")":
+        #         right_tuple += 1
+        #
+        #     elif sentence[i] == "[":
+        #         left_list += 1
+        #
+        #     elif sentence[i] == "]":
+        #         right_list += 1
+
+        for i in range(len(sentence)):
+
+            if (sentence[i].isalnum() and sentence[i+1] == "["):
+                # by using the name if the string before the list to create a new list
+                sentence[i] = list()
+                # the level of the list plus one
+                left_list += 1
+                levels[sentence[i]] = [True,left_list,glevel]
+                # to check if last is a list
+                if last == True:
+                    levels[glevel].append(sentence[i])
+                # or it is a tuple
+                elif last == False:
+                    levels[glevel].append(sentence[i])
+                last = True
+                levels[glevel].append(sentence[i]) # insert in to the last level
+                # the general level which the element is in, to check if it is a list in a tuple
+                glevel += 1
+
+            elif (sentence[i].isalnum() and sentence[i+1] == "("):
+                sentence[i]=list()
+                left_tuple += 1
+                levels[sentence[i]] = [False,left_tuple,glevel]
+                if last == True:
+                    levels[glevel].append(sentence[i])
+                elif last == False:
+                    levels[glevel].append(sentence[i])
+                last = False
+                levels[glevel].append(sentence[i])
+                glevel += 1
+
+            elif (sentence[i].isalnum() and sentence[i+1] == "=" and sentence[i+2] not in "[("):
+                sentence[i]=sentence[i+2]
+                if last == 1:
+                    levels[left_list - right_list].append(sentence[i])
+                elif last == 0:
+                    levels[left_tuple - right_tuple].append(sentence[i])
+
+            elif (sentence[i].isalnum() and sentence[i+1] == "=" and sentence[i+2]=="["):
+                sentence[i]=list()

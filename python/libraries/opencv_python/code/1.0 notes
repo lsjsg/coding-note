@@ -1,0 +1,3 @@
+cv2.imread(文件名，标记) 读入彩色图像
+cv2.IMREAD_COLOR()       读入彩色图像
+cv2.IMREAD_GRAYSCALE()   以灰度模式读入图像
